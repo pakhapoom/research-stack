@@ -10,14 +10,14 @@
   },
   "plugins": [
     {
-      "name": "paper",
-      "source": "./plugins/paper",
+      "name": "research-stack",
+      "source": "./plugins/research-stack",
       "description": "Give it a paper URL (arXiv, OpenReview, ACL Anthology, DOI, direct PDF) or a local PDF and get a structured study guide, then keep asking questions about it.",
       "version": "0.1.0",
       "author": {
         "name": "pakhapoom"
       },
-      "homepage": "https://github.com/pakhapoom/research-stack/tree/main/plugins/paper",
+      "homepage": "https://github.com/pakhapoom/research-stack/tree/main/plugins/research-stack",
       "repository": "https://github.com/pakhapoom/research-stack",
       "license": "MIT",
       "category": "research",

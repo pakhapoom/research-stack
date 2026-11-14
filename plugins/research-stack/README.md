@@ -1,4 +1,4 @@
-# paper
+# research-stack plugin
 
 Study an academic paper from a link and come away understanding it.
 
@@ -32,13 +32,13 @@ paper text. Use `--keep-notes` to keep the notes file.
 
 ```text
 /plugin marketplace add pakhapoom/research-stack
-/plugin install paper@research-stack
+/plugin install research-stack@research-stack
 ```
 
 ## Usage
 
 ```text
-/paper:study <url | arXiv-id | DOI | path.pdf> [--quick | --deep] [--out DIR] [--keep-notes]
+/research-stack:study <url | arXiv-id | DOI | path.pdf> [--quick | --deep] [--out DIR] [--keep-notes]
 ```
 
 | Mode | Output |

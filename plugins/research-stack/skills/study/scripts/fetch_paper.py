@@ -35,7 +35,7 @@ import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
 
-USER_AGENT = "research-stack-paper/0.1 (Claude Code plugin; +https://github.com/pakhapoom/research-stack)"
+USER_AGENT = "research-stack/0.1 (Claude Code plugin; +https://github.com/pakhapoom/research-stack)"
 TIMEOUT = 30
 MAX_BYTES = 100 * 1024 * 1024  # 100 MB
 
@@ -475,7 +475,7 @@ def main() -> int:
         gi = os.path.join(args.work_root, ".gitignore")
         if not os.path.exists(gi):
             with open(gi, "w") as f:
-                f.write("# research-stack paper plugin: working files (downloaded papers, extracted text, notes)\n*\n")
+                f.write("# research-stack plugin: working files (downloaded papers, extracted text, notes)\n*\n")
     info["work_dir"] = out
 
     if not args.no_download and info["html_url"]:
