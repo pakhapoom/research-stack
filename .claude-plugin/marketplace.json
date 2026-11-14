@@ -1,0 +1,27 @@
+{
+  "name": "research-stack",
+  "owner": {
+    "name": "pakhapoom",
+    "url": "https://github.com/pakhapoom"
+  },
+  "metadata": {
+    "description": "Claude Code plugins and skills for research: reading, studying, and working with academic papers.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "paper",
+      "source": "./plugins/paper",
+      "description": "Give it a paper URL (arXiv, OpenReview, ACL Anthology, DOI, direct PDF) or a local PDF and get a structured study guide, then keep asking questions about it.",
+      "version": "0.1.0",
+      "author": {
+        "name": "pakhapoom"
+      },
+      "homepage": "https://github.com/pakhapoom/research-stack/tree/main/plugins/paper",
+      "repository": "https://github.com/pakhapoom/research-stack",
+      "license": "MIT",
+      "category": "research",
+      "keywords": ["research", "papers", "arxiv", "academic", "study", "reading"]
+    }
+  ]
+}

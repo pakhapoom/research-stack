@@ -1,0 +1,13 @@
+{
+  "name": "paper",
+  "version": "0.1.0",
+  "description": "Give it a paper URL (arXiv, OpenReview, ACL Anthology, DOI, direct PDF) or a local PDF and get a structured study guide, then keep asking questions about it.",
+  "author": {
+    "name": "pakhapoom",
+    "url": "https://github.com/pakhapoom"
+  },
+  "homepage": "https://github.com/pakhapoom/research-stack/tree/main/plugins/paper",
+  "repository": "https://github.com/pakhapoom/research-stack",
+  "license": "MIT",
+  "keywords": ["research", "papers", "arxiv", "academic", "study", "reading"]
+}
