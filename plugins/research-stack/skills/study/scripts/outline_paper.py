@@ -20,9 +20,10 @@ import sys
 
 MD_HEADING = re.compile(r"^(#{1,6})\s+(.+?)\s*$")
 # Plain-text (pdftotext/pypdf) headings: "3 Method", "3.2. Training", "A.1 Proofs"
-NUM_HEADING = re.compile(r"^\s*((?:\d+|[A-H])(?:\.\d+)*)\.?\s+([A-Z][^\n]{2,90})$")
+NUM_HEADING = re.compile(r"^\s*((?:\d{1,2}|[A-H])(?:\.\d+)*)\.?\s+([A-Z][^\n]{2,90})$")
 WORD_HEADING = re.compile(
-    r"^\s*(abstract|references|bibliography|acknowledge?ments?|appendix(?:\s+[A-Z])?\b.*|"
+    r"^\s*(abstract|references|bibliography|acknowledge?ments?|"
+    r"appendi(?:x|ces)(?:\s+[A-Z])?(?:[:.]?\s+[A-Z][\w ,:&\-]*)?|"
     r"conclusions?|discussion|limitations)\s*$",
     re.I,
 )
@@ -59,7 +60,10 @@ def strip_num(title: str) -> str:
 
 def find_headings(lines: list[str]) -> list[dict]:
     heads = []
-    md = any(MD_HEADING.match(l) for l in lines)
+    # Markdown mode only for the arXiv HTML render. PDF text can contain stray lines that
+    # start with "#" (e.g. table rows like "# of roles 100"), which are not headings.
+    md_heads = [m for l in lines if (m := MD_HEADING.match(l)) and re.match(r"[A-Z0-9]", m.group(2))]
+    md = len(md_heads) >= 3
     seen_refs = False
     for i, line in enumerate(lines, 1):
         if md:
@@ -68,7 +72,7 @@ def find_headings(lines: list[str]) -> list[dict]:
                 heads.append({"line": i, "level": len(m.group(1)), "title": m.group(2)})
             continue
         s = line.strip()
-        if not s or len(s) > 100 or s.endswith((".", ",", ";")):
+        if not s or len(s) > 100 or s.endswith((".", ",", ";", ":")):
             continue
         if re.fullmatch(r"(references|bibliography)", s, re.I):
             seen_refs = True
