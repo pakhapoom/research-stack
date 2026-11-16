@@ -35,13 +35,9 @@ ask. Read `references/reader-purpose.md` only when a purpose is set.
 **Outside context.** The user can supply it three ways: a file path after
 `--context`, text pasted into the message next to the paper reference (this counts
 even without the flag), or `--context` alone, which means look it up on the web.
-Read `references/outside-context.md` only when one of these applies. Outside
-context never changes how you read the paper: **do not open a context file or start
-a web lookup until the Pass 3 notes are written.** Pasted text is already in front
-of you; save it to `<work_dir>/context.md` without acting on it, and do not let it
-steer what you read or conclude in the passes. Points that appear only in the
-outside material belong in "Outside context", credited to it, even if the paper
-turns out to support them.
+Note which one applies; it is handled in **Step 2b**, after the paper has been
+read and assessed. Pasted text: save it to `<work_dir>/context.md` with the Write
+tool now, then set it aside until Step 2b.
 
 ## Step 1: Fetch the paper
 
@@ -147,6 +143,19 @@ on it, and record that you did. Write the **Pass 3** part of the notes.
 If your context was compacted at any point, re-read the notes file before
 continuing; it is the memory of what you have read.
 
+## Step 2b: Outside context (only with `--context` or pasted material)
+
+Start this step only once the Pass 3 notes are written. Now read
+`references/outside-context.md`, then the outside material: the context file, the
+saved `<work_dir>/context.md`, or a web lookup. Follow that reference to write an
+**Outside context** block at the end of the notes. You may re-open paper line ranges
+to check an outside claim, and record which.
+
+Do not edit the Pass 1–3 notes in this step. If the outside material changes your
+view of a claim, say so in the Outside context block and name the source. A point
+that came from the outside material is credited to it, even when the paper turns
+out to support it.
+
 ## Step 3: Write the study guide
 
 Write the guide **from the notes**, following `references/study-guide-template.md`
@@ -164,7 +173,7 @@ Write the guide **from the notes**, following `references/study-guide-template.m
 
 With a purpose or outside context, apply the matching reference file now: the
 purpose shapes emphasis and adds one section; outside context goes only in its own
-"Outside context" section, written after the rest of the guide.
+"Outside context" section, written from the Step 2b notes after the rest of the guide.
 
 Save to `<out>/<year>-<short-slug>.md` (e.g. `paper-notes/2021-lora.md`), creating
 the directory if needed. Do not overwrite an existing file: append `-2` instead. With

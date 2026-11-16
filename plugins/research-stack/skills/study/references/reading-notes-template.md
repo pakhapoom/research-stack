@@ -64,4 +64,10 @@ source: <text_path>   outline: <run outline_paper.py again if needed>
 - Re-read to verify: L…-L… (what was checked)
 - Appendix lookups (only if a verdict depended on deferred content): App. … L… → …
 - Open questions: …
+
+## Outside context
+<!-- Only with --context or pasted material. Written in Step 2b, after Pass 3. -->
+- Source: <user-file: path | user-paste | web: URL>
+- Point: … → paper check: L… (agrees / disagrees / not tested)
+- Changes to a Pass 3 verdict: C… … (or "none")
 ```
