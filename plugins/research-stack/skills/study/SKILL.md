@@ -36,7 +36,12 @@ ask. Read `references/reader-purpose.md` only when a purpose is set.
 `--context`, text pasted into the message next to the paper reference (this counts
 even without the flag), or `--context` alone, which means look it up on the web.
 Read `references/outside-context.md` only when one of these applies. Outside
-context never changes how you read the paper: do the three passes first.
+context never changes how you read the paper: **do not open a context file or start
+a web lookup until the Pass 3 notes are written.** Pasted text is already in front
+of you; save it to `<work_dir>/context.md` without acting on it, and do not let it
+steer what you read or conclude in the passes. Points that appear only in the
+outside material belong in "Outside context", credited to it, even if the paper
+turns out to support them.
 
 ## Step 1: Fetch the paper
 
