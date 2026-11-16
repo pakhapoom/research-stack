@@ -5,6 +5,8 @@ A [Claude Code](https://code.claude.com) plugin of skills for research work.
 | Skill | What it does |
 | --- | --- |
 | [`/research-stack:study`](plugins/research-stack) | Give it a paper link (arXiv, Hugging Face Papers, ACL Anthology, OpenReview, DOI, publisher page, direct PDF) or a local PDF, and get a grounded study guide plus Q&A. |
+| [`/research-stack:compare`](plugins/research-stack#compare-papers-you-have-studied) | Work across the papers you have studied: side-by-side comparisons, questions over your whole library, conflicting numbers, and syntheses such as a related-work draft. |
+| [`/research-stack:implement`](plugins/research-stack#implement-a-paper) | Turn a paper into code: an implementation spec that cites the paper for every value, then a minimal implementation. Reuses an earlier study of the same paper. |
 
 ## Install
 
@@ -28,13 +30,20 @@ Restart Claude Code after installing. Update later with
 ## Use
 
 ```text
-/research-stack:study <paper> [--quick | --deep] [--out DIR] [--keep-notes]
+/research-stack:study <paper> [--quick | --deep] [--for PURPOSE] [--context [FILE]] [--out DIR] [--keep-notes]
+/research-stack:implement <paper | study-guide.md> [--plan-only] [--code DIR] [--out DIR]
+/research-stack:compare [guides or a question] [--out DIR] [--save]
 ```
 
 ```text
 /research-stack:study https://arxiv.org/abs/1706.03762
 /research-stack:study 10.18653/v1/N19-1423 --deep
 /research-stack:study ~/Downloads/paper.pdf --quick
+/research-stack:study 2106.09685 --for implement
+/research-stack:study 2106.09685 --context notes/reviews.md
+/research-stack:implement 2106.09685
+/research-stack:compare 2021-lora 2023-dora
+/research-stack:compare which papers I've read use human evaluation?
 ```
 
 Or just paste a paper link on its own, or ask *"Help me study this paper:
@@ -45,6 +54,8 @@ https://arxiv.org/abs/2106.09685"*. The skill triggers automatically.
 | *(none)* | Full study guide |
 | `--quick` | One-page brief |
 | `--deep` | Full guide plus equation walkthroughs, reproduction notes, and a reviewer-style critique |
+| `--for PURPOSE` | Shape the guide for what you will do with the paper: `implement`, `review`, `cite`, `present`, or `build-on` |
+| `--context [FILE]` | Add an "Outside context" section from a file, from text you paste with the request, or (with no file) from a web lookup of reviews, follow-up work, and code |
 | `--out DIR` | Save to `DIR` instead of `./paper-notes/` |
 | `--keep-notes` | Also keep the reading notes next to the guide |
 
@@ -127,12 +138,23 @@ plugins/
     README.md
     skills/study/                 # the /research-stack:study skill
       SKILL.md                    # the skill instructions (three-pass reading)
-      references/                 # guide/notes templates, critical-reading checklist
+      references/                 # guide/notes templates, critical-reading checklist,
+                                  # reader-purpose and outside-context rules
       scripts/
-        fetch_paper.py            # resolves and downloads papers
+        fetch_paper.py            # resolves and downloads papers; finds earlier studies
         outline_paper.py          # builds the three-pass reading plan
         verify_numbers.py         # checks the guide's numbers against the paper
-                                  # (all standard-library Python)
+    skills/compare/               # the /research-stack:compare skill
+      SKILL.md
+      references/                 # output formats for cross-paper work
+      scripts/
+        index_guides.py           # indexes and searches the saved study guides
+    skills/implement/             # the /research-stack:implement skill
+      SKILL.md
+      references/                 # implementation spec template
+      scripts/
+        impl_plan.py              # picks the parts of a paper that code needs
+                                  # (all scripts are standard-library Python)
 ```
 
 New skills go in `plugins/research-stack/skills/<name>/` and become
