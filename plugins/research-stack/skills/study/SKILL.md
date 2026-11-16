@@ -1,7 +1,7 @@
 ---
 name: study
 description: Study an academic paper from a URL, arXiv ID, DOI, or local PDF using a three-pass reading method (overview, understand, assess) and produce a structured study guide (big picture, section-by-section map, method, results, critique, glossary, self-check questions), then answer follow-up questions grounded in the paper. Use whenever the user shares a link to a research paper, even a bare link with no other instruction (arxiv.org, huggingface.co/papers, openreview.net, aclanthology.org, doi.org, semanticscholar.org, a conference or journal page, a .pdf), or asks to study, read, explain, break down, or take notes on a research paper.
-argument-hint: <paper-url | arXiv-id | DOI | path/to/paper.pdf> [--quick | --deep] [--out DIR] [--keep-notes]
+argument-hint: <paper-url | arXiv-id | DOI | path/to/paper.pdf> [--quick | --deep] [--for PURPOSE] [--context [FILE]] [--out DIR] [--keep-notes]
 ---
 
 # Study a paper
@@ -21,10 +21,22 @@ Parse these from the input (anything else is the paper reference):
 | `--quick` | Pass 1, then pass 2 on the method and main-results sections only; one-page brief. |
 | *(default)* | All three passes; full study guide using `references/study-guide-template.md`. |
 | `--deep` | All three passes with the full `references/critical-reading.md` review, equation walkthroughs, and reproduction notes. |
+| `--for PURPOSE` | Why the user is reading: `implement`, `review`, `cite`, `present`, or `build-on`. Shifts the guide's emphasis; see `references/reader-purpose.md`. |
+| `--context [FILE]` | Add material from outside the paper (reviews, follow-up work, a colleague's notes) in its own section; see `references/outside-context.md`. |
 | `--out DIR` | Where to save the guide. Default: `./paper-notes/`. |
 | `--keep-notes` | Also save the reading notes next to the guide as `<name>.notes.md`. |
 
 If no paper reference was given, ask for one and stop.
+
+**Purpose.** A purpose stated in words counts as `--for` ("I have to review this",
+"I want to implement it"). Without one, write for general understanding and do not
+ask. Read `references/reader-purpose.md` only when a purpose is set.
+
+**Outside context.** The user can supply it three ways: a file path after
+`--context`, text pasted into the message next to the paper reference (this counts
+even without the flag), or `--context` alone, which means look it up on the web.
+Read `references/outside-context.md` only when one of these applies. Outside
+context never changes how you read the paper: do the three passes first.
 
 ## Step 1: Fetch the paper
 
@@ -83,6 +95,21 @@ Then write the **Pass 1** part of the notes:
   objective, inferred from its heading, opening sentence, and the roadmap;
 - expectations and questions to answer in pass 2.
 
+**Related guides.** If the output directory already holds study guides, check
+whether the user has studied something related, using the paper's key terms (method
+names, datasets, the task):
+
+```bash
+python3 "${CLAUDE_PLUGIN_ROOT}/skills/compare/scripts/index_guides.py" "<out>" --query "<term>, <term>"
+```
+
+List the matching guides in the notes with one line each from their TL;DR. This is
+only the index output: do not open the guides now. Later, in the study guide, point
+to a related guide instead of re-explaining a concept it already covers, and name
+the precise difference in "How it fits in the literature". Open a related guide's
+section only if you need it to state that difference correctly. No guides or no
+match: skip this silently.
+
 ### Pass 2: Understand (what does each section do, and how?)
 
 Go through the pass-2 chunks **in order, one at a time**. Before each chunk, look at
@@ -130,6 +157,10 @@ Write the guide **from the notes**, following `references/study-guide-template.m
 - **Calibrate to the reader:** technically literate, new to this subfield.
 - **Write in the user's language**, keeping technical terms and the title as in the paper.
 
+With a purpose or outside context, apply the matching reference file now: the
+purpose shapes emphasis and adds one section; outside context goes only in its own
+"Outside context" section, written after the rest of the guide.
+
 Save to `<out>/<year>-<short-slug>.md` (e.g. `paper-notes/2021-lora.md`), creating
 the directory if needed. Do not overwrite an existing file: append `-2` instead. With
 `--keep-notes`, copy the notes file to `<out>/<year>-<short-slug>.notes.md`.
@@ -143,13 +174,16 @@ python3 "${CLAUDE_PLUGIN_ROOT}/skills/study/scripts/verify_numbers.py" "<guide.m
 It lists numbers in the guide that do not appear in the paper text, with line
 numbers. Go through every flagged number: fix transcription errors; for values you
 computed yourself (worked examples, ratios), recheck the arithmetic and make sure the
-text presents them as derived. Mention in chat what you checked.
+text presents them as derived. Numbers in the "Outside context" section are expected
+to be flagged; check them against their own source instead. Mention in chat what you
+checked.
 
 ## Step 4: Present and continue
 
 In chat, give: the file path, a 3–5 line TL;DR, and 3 suggested follow-up
 directions (e.g. "walk through Eq. 3 with numbers", "compare with <closest prior
-work>", "how would I reproduce Table 2?").
+work>", "how would I reproduce Table 2?"). If the purpose is `implement`, make one
+of them `/research-stack:implement`, which reuses these notes.
 
 Then stay in study mode. Answer follow-up questions from the notes first, re-opening
 the relevant line ranges for detail, and cite them. When a question goes beyond the

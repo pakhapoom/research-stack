@@ -16,9 +16,14 @@ source: <landing URL>
 pdf: <pdf URL if any>
 paper_type: <method | benchmark | empirical | theory | survey | position | system>
 tags: [<3-6 topic tags>]
+datasets: [<datasets and benchmarks used, as named in the paper>]
+metrics: [<metrics reported>]
+baselines: [<main methods it compares against>]
 studied: <today's date, YYYY-MM-DD>
 depth: <quick | standard | deep>
 content_basis: <full-text | summarized-fetch | abstract-only>
+purpose: <general | implement | review | cite | present | build-on>
+outside_context: [<user-file | user-paste | web>]   # omit the line if none was used
 ---
 
 # <Paper title>
@@ -71,6 +76,8 @@ Your own evaluation, clearly separated from the authors' claims:
 ## How it fits in the literature
 - Closest prior work and the precise difference.
 - What later work this enables or what it might be compared against.
+- Related guides in your library, if any: a relative link to each and the precise
+  difference from this paper (omit when there are none).
 
 ## Glossary
 | Term / symbol | Meaning in this paper |
@@ -92,6 +99,13 @@ collapsible block:
 - Suggested next papers to read (only ones cited in the paper or that you are
   confident exist; mark any from outside knowledge).
 ````
+
+## Extra sections for `--for` and `--context`
+
+- `--for PURPOSE`: one purpose section, inserted after "Critical assessment". Its
+  name and contents are in `reader-purpose.md`.
+- `--context`: an **Outside context** section, inserted before "Glossary". Its
+  contents and rules are in `outside-context.md`.
 
 ## Extra sections for `--deep`
 

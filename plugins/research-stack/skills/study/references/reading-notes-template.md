@@ -28,6 +28,9 @@ source: <text_path>   outline: <run outline_paper.py again if needed>
 | --- | --- | --- |
 | 2 Problem Statement | L117-142 | Formalize full fine-tuning and its cost |
 
+### Related guides in the library
+- <guide file>: <one line from its TL;DR> (omit this block if none matched)
+
 ### Expectations and questions for pass 2
 - Q1: How does <proposal> avoid <limitation>?
 - Prediction: the method probably …; main evidence probably in §5, Table 4.
