@@ -9,11 +9,15 @@ Standard library only. Prints a JSON report to stdout describing what was found:
     "abstract": "...", "landing_url": "...", "pdf_url": "...", "html_url": "...",
     "pdf_path": "/abs/path/paper.pdf" | null,
     "text_path": "/abs/path/paper.txt" | null,
+    "notes_path": "/abs/path/notes.md" | null,     # reading notes from an earlier study
+    "guide_paths": ["/abs/path/2021-lora.md"],     # study guides already written for it
     "notes": ["..."]
   }
 
 Usage:
-  fetch_paper.py <url-or-id-or-path> [--work-root DIR | --out DIR] [--no-download]
+  fetch_paper.py <url-or-id-or-path> [--work-root DIR | --out DIR] [--no-download] [--refresh]
+
+Files already in the work directory are reused; pass --refresh to download again.
 
 Files go to <work-root>/<slug>/ (default ./paper-notes/.work/<slug>/). The work root
 gets a .gitignore so downloaded papers are never committed by accident.
@@ -437,6 +441,38 @@ def slugify(info: dict) -> str:
     return s[:80] or "paper"
 
 
+def find_guides(guide_dir: str, info: dict) -> list[str]:
+    """Study guides in guide_dir whose front matter points at this paper."""
+    keys = [info.get("landing_url"), info.get("pdf_url"), info.get("doi")]
+    if info.get("source_type") == "arxiv" and info.get("id"):
+        keys.append("arxiv.org/abs/" + re.sub(r"v\d+$", "", info["id"]))
+    keys = [k.lower().rstrip("/") for k in keys if k]
+    title = " ".join((info.get("title") or "").lower().split())
+    found = []
+    try:
+        names = sorted(os.listdir(guide_dir))
+    except OSError:
+        return found
+    for name in names:
+        if not name.endswith(".md") or name.endswith(".notes.md"):
+            continue
+        path = os.path.join(guide_dir, name)
+        try:
+            with open(path, encoding="utf-8", errors="replace") as f:
+                head = f.read(4000)
+        except OSError:
+            continue
+        if not head.startswith("---"):
+            continue
+        front = head.split("\n---", 1)[0].lower()
+        fields = dict(re.findall(r"^(\w+):\s*(.*)$", front, re.M))
+        links = " ".join(fields.get(k, "") for k in ("source", "pdf", "doi"))
+        guide_title = " ".join(fields.get("title", "").strip("\"' ").split())
+        if any(k in links for k in keys) or (title and guide_title == title):
+            found.append(os.path.abspath(path))
+    return found
+
+
 def extract_text(pdf_path: str, txt_path: str) -> str | None:
     """Try pdftotext, then pypdf. Returns the tool used, or None."""
     if shutil.which("pdftotext"):
@@ -466,6 +502,8 @@ def main() -> int:
                     help="parent of the per-paper work directory (default: ./paper-notes/.work)")
     ap.add_argument("--out", help="exact work directory to use instead of <work-root>/<slug>")
     ap.add_argument("--no-download", action="store_true", help="resolve metadata only")
+    ap.add_argument("--refresh", action="store_true",
+                    help="download again even if the work directory already has the paper")
     args = ap.parse_args()
 
     info = resolve(args.ref)
@@ -478,7 +516,30 @@ def main() -> int:
                 f.write("# research-stack plugin: working files (downloaded papers, extracted text, notes)\n*\n")
     info["work_dir"] = out
 
-    if not args.no_download and info["html_url"]:
+    # Earlier work on this paper: reading notes in the work directory, guides next to it.
+    notes_md = os.path.join(out, "notes.md")
+    info["notes_path"] = notes_md if os.path.isfile(notes_md) else None
+    info["guide_paths"] = [] if args.out else find_guides(os.path.dirname(os.path.abspath(args.work_root)), info)
+
+    def cached(name: str, min_size: int) -> str | None:
+        path = os.path.join(out, name)
+        ok = not args.refresh and os.path.isfile(path) and os.path.getsize(path) >= min_size
+        return path if ok else None
+
+    reused = []
+    if not args.no_download:
+        if cached("paper.pdf", 1000) and not info["pdf_path"]:
+            info["pdf_path"] = cached("paper.pdf", 1000)
+            reused.append("paper.pdf")
+        for name in ("paper.html.txt", "paper.txt"):
+            if cached(name, 2000):
+                info["text_path"] = cached(name, 2000)
+                reused.append(name)
+                break
+        if reused:
+            info["notes"].append(f"Reused {', '.join(reused)} from the work directory (use --refresh to download again).")
+
+    if not args.no_download and info["html_url"] and not info["text_path"]:
         os.makedirs(out, exist_ok=True)
         html_txt = os.path.join(out, "paper.html.txt")
         if html_to_text(info["html_url"], html_txt):
