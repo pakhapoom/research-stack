@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/banner.png" alt="research-stack: study, compare, and implement research papers with Claude Code" width="100%">
+</p>
+
 # research-stack
 
 A [Claude Code](https://code.claude.com) plugin of skills for research work.
