@@ -77,6 +77,30 @@ Update later with `claude plugin marketplace update research-stack`.
 
 </details>
 
+<details>
+<summary>Using GitHub Copilot instead? (Copilot CLI or VS Code)</summary>
+
+The skills follow the open [Agent Skills](https://agentskills.io) format, so Copilot
+can run them too.
+
+**Copilot CLI** reads this repo's plugin files directly:
+
+```bash
+copilot plugin marketplace add pakhapoom/research-stack
+copilot plugin install research-stack@research-stack
+```
+
+**VS Code (Copilot agent mode):** run **Chat: Install Plugin from Source** and enter
+`https://github.com/pakhapoom/research-stack`. Or copy the three folders in
+`plugins/research-stack/skills/` into `~/.copilot/skills/` (all your projects) or
+`.github/skills/` (one repository). Keep the three folders side by side, because the
+skills use each other's scripts.
+
+In Copilot the commands are `/study`, `/compare`, and `/implement` (not
+`/research-stack:study`), and plain sentences work the same way.
+
+</details>
+
 ---
 
 ## What you can do
@@ -287,6 +311,12 @@ decide whether and how to use this plugin.
   [`plugins/research-stack/.claude-plugin/plugin.json`](plugins/research-stack/.claude-plugin/plugin.json).
 - **Install:** `claude plugin marketplace add pakhapoom/research-stack` then
   `claude plugin install research-stack@research-stack`. A restart is required.
+  GitHub Copilot CLI: the same two commands with `copilot` in place of `claude`.
+  Other Agent Skills hosts: copy `plugins/research-stack/skills/*` into the host's
+  skills folder, keeping the three skill folders together.
+- **Non-Claude hosts:** each `SKILL.md` says how to resolve `${CLAUDE_PLUGIN_ROOT}`
+  (two levels above the `SKILL.md`) and how to map Claude Code tool names. Skill
+  names there are unprefixed (`study`, `compare`, `implement`).
 - **Skills and when to use each:**
 
   | Skill | Use when | Do not use when |
@@ -323,6 +353,12 @@ implement skill produces code.
 **Does it cost anything?**
 The plugin is free and open source (MIT). Claude Code itself needs a Claude account
 that includes it.
+
+**Does it work with GitHub Copilot?**
+Yes, in Copilot CLI and in VS Code agent mode. See
+[Using GitHub Copilot instead?](#set-it-up-in-3-steps) under setup. It is built and
+tested mainly with Claude Code, so tell us if something behaves differently in
+Copilot.
 
 **What if a paper is behind a paywall?**
 If only the abstract can be reached, the guide is clearly marked *abstract-only*

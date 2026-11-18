@@ -14,6 +14,9 @@
 2. Put long templates and checklists in `references/` and helper code in `scripts/`
    next to `SKILL.md`; refer to them from `SKILL.md` so they load only when needed.
    Reference scripts as `${CLAUDE_PLUGIN_ROOT}/skills/<skill-name>/scripts/...`.
+   Copy the **Outside Claude Code** paragraph from an existing `SKILL.md` (right
+   after `Input:`) so the skill also runs in GitHub Copilot, and keep scripts
+   standard-library Python with no Claude-specific environment variables.
 3. Bump `version` in the plugin's `.claude-plugin/plugin.json` **and** its entry in
    `.claude-plugin/marketplace.json` (they must match).
 

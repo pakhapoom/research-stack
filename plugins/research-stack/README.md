@@ -36,6 +36,19 @@ paper text. Use `--keep-notes` to keep the notes file.
 /plugin install research-stack@research-stack
 ```
 
+**GitHub Copilot CLI** reads the same `.claude-plugin/` manifests:
+
+```bash
+copilot plugin marketplace add pakhapoom/research-stack
+copilot plugin install research-stack@research-stack
+```
+
+**VS Code (Copilot agent mode):** run **Chat: Install Plugin from Source** with
+`https://github.com/pakhapoom/research-stack`, or copy the three folders in
+`skills/` into `~/.copilot/skills/` (personal) or `.github/skills/` (one repo). Keep
+the three folders side by side, because the skills call each other's scripts. In
+Copilot the commands are `/study`, `/compare`, and `/implement`.
+
 ## Usage
 
 ```text
