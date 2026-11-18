@@ -12,6 +12,15 @@ notes file on disk. The notes become a study guide, followed by an open Q&A.
 
 Input: `$ARGUMENTS`
 
+**Outside Claude Code** (GitHub Copilot or another Agent Skills host):
+`${CLAUDE_PLUGIN_ROOT}` means the folder two levels above this file, the one that
+holds `skills/`. If it was not replaced with a real path, put that absolute path in
+its place in every command, because the shell would expand it to nothing. If
+`$ARGUMENTS` above is still literal, the input is the user's message. Tool names
+(Read, Write, Edit, Grep, WebFetch, WebSearch) are Claude Code's, so use your host's
+equivalent tools. `/research-stack:<skill>` is the Claude Code command; in Copilot
+it is `/<skill>`.
+
 ## Options
 
 Parse these from the input (anything else is the paper reference):
