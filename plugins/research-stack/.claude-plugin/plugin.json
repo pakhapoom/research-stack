@@ -1,6 +1,6 @@
 {
   "name": "research-stack",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Give it a paper URL (arXiv, OpenReview, ACL Anthology, DOI, direct PDF) or a local PDF and get a structured study guide, keep asking questions about it, compare it with other papers you have studied, and turn it into code.",
   "author": {
     "name": "pakhapoom",
